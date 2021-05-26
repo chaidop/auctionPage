@@ -19,7 +19,7 @@ class App extends Component {
       const deployedNetwork = AuctionContract.networks[networkId];
       const instance = new web3.eth.Contract(
         AuctionContract.abi,
-        deployedNetwork && deployedNetwork.address,
+       '0xd9145CCE52D386f254917e481eB44e9943F39138',
       );
     const response1 = await instance.methods.highestBid.call();
     const response2 = await instance.methods.highestBidder.call();
@@ -89,7 +89,7 @@ clicked_highestBid = async () => {
     console.log(response1);
     
     // Update state with the result.
-    this.setState({ highestBid: response1, show_high: response1});
+    //this.setState({ highestBid: response1, show_high: response1});
   };
 
 clicked_highestBidder = async () => {
@@ -98,7 +98,7 @@ clicked_highestBidder = async () => {
     const response1 = await contract.methods.highestBidder().call();
     console.log(response1);
     // Update state with the result.
-    this.setState({ highestBidder: response1, show_high: response1});
+    //this.setState({ highestBidder: response1, show_high: response1});
   };
   
   render() {
