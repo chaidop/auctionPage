@@ -19,7 +19,8 @@ class App extends Component {
       const deployedNetwork = AuctionContract.networks[networkId];
       const instance = new web3.eth.Contract(
         AuctionContract.abi,
-       '0xd9145CCE52D386f254917e481eB44e9943F39138',
+        deployedNetwork && deployedNetwork.address,
+
       );
     const response1 = await instance.methods.highestBid.call();
     const response2 = await instance.methods.highestBidder.call();
@@ -41,9 +42,10 @@ myChangeHandler = (event) => {
         this.setState({input: event.target.value}, ()=>{
         console.log(this.state.input)
         });
+
 }
 
-
+ 
   /*runExample = async () => {
     const { accounts, contract } = this.state;
         console.log("hi");
@@ -65,8 +67,8 @@ myChangeHandler = (event) => {
     await contract.methods.bid().send({from: accounts[0], value: web3.utils.toWei(this.state.input)});
 
     // Get the value from the contract to prove it worked.
-    const response1 = await contract.methods.highestBid.call();
-	const response2 = await contract.methods.highestBidder.call();
+    const response1 = await contract.methods.highestBid().call();
+    const response2 = await contract.methods.highestBidder().call();
     // Update state with the result.
     this.setState({ highestBid: response1, highestBidder: response2 });
   };
@@ -76,56 +78,63 @@ myChangeHandler = (event) => {
 
     await contract.methods.withdraw().send({from: accounts[0]});
 
-    const response1 = await contract.methods.highestBid.call();
-	const response2 = await contract.methods.highestBidder.call();
+    const response1 = await contract.methods.highestBid().call();
+    const response2 = await contract.methods.highestBidder().call();
     // Update state with the result.
     this.setState({ highestBid: response1, highestBidder: response2});
   };
 
 clicked_highestBid = async () => {
-    const  contract  = this.state.contract;
+   const  contract  = this.state.contract;
 
     const response1 = await contract.methods.highestBid().call();
+    const response2 = await contract.methods.highestBidder().call();
     console.log(response1);
     
     // Update state with the result.
-    //this.setState({ highestBid: response1, show_high: response1});
+    this.setState({ highestBid: response1,highestBidder: response2, show_high: response1});
   };
 
 clicked_highestBidder = async () => {
     const  contract  = this.state.contract;
 
     const response1 = await contract.methods.highestBidder().call();
+    const response2 = await contract.methods.highestBid().call();
     console.log(response1);
     // Update state with the result.
-    //this.setState({ highestBidder: response1, show_high: response1});
+    this.setState({ highestBidder: response1,highestBid: response2, show_high: response1});
   };
   
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
-    }
-	let sh
-	if(this.state.show_high == null){
-		sh = <div>Highest Bid: 0, Highest Bidder: NONE </div>
-	}
-	else{
-	  const cc = this.state.contract;
-	  this.state.highestBid = cc.methods.getHighestBid();
-	  this.state.highestBid = cc.methods.getHighestBidder();
-	  this.clicked_highestBid();
-	  this.clicked_highestBidder();
-	  sh = <div>Highest Bid: {this.state.highestBid}, Highest Bidder: {this.state.highestBidder} </div>
-	}
-	/*let show_highest
-	if(this.state.highestBid == null || this.state.highestBidder == null){
-		show_highest = ""
-	}
-	else{
-		show_highest = <div><div>Highest Bid:{this.state.highestBid}</div>
-		</div>
-	}*/
-console.log(Number(this.state.highestBid));
+  }
+        let sh
+        if(this.state.show_high == null){
+                sh = <div>Highest Bid: 0, Highest Bidder: NONE </div>;
+        }
+        else{
+	  const web3 = this.state.web3;
+          /*const contract = this.state.contract;
+	  let highestBid
+	  let highestBidder
+          highestBid = await  contract.methods.getHighestBid().call();
+          highestBidder = await contract.methods.getHighestBidder().call();
+          this.clicked_highestBid();
+          this.clicked_highestBidder();*/
+	  let hexn
+	  hexn = ((this.state.highestBidder).toString(16)).toUpperCase();
+          sh = <div>Highest Bid: {Number(web3.utils.fromWei(this.state.highestBid))}, Highest Bidder: {hexn} </div>
+        }
+        /*let show_highest
+        if(this.state.highestBid == null || this.state.highestBidder == null){
+                show_highest = ""
+        }
+        else{
+                show_highest = <div><div>Highest Bid:{this.state.highestBid}</div>
+                </div>
+        }*/
+	console.log(Number(this.state.highestBid));
     return (
       <div className="App">
         <h1>Welcome to the world's best Auction!</h1>
@@ -134,7 +143,7 @@ console.log(Number(this.state.highestBid));
         <p>
           Make a bid
         </p>
-		<input type="text" onChange={this.myChangeHandler}/>
+                <input type="text" onChange={this.myChangeHandler}/>
         <button onClick={this.clicked_bid}>BID</button>
         <p>
           Withdraw bid
@@ -142,16 +151,17 @@ console.log(Number(this.state.highestBid));
         <button onClick={this.clicked_withdraw}>WITHDRAW</button>
         <div>
         <button onClick={this.clicked_highestBid}>Highest Bid</button>
-	</div>
-	 <div>
+        </div>
+         <div>
         <button onClick={this.clicked_highestBidder}>Highest Bidder</button>
         </div>
-	<div>
-	{sh}
-	</div>
+        <div>
+        {sh}
+        </div>
       </div>
     );
   }
 }
+ 
  
 export default App;
