@@ -5,7 +5,7 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 
 class App extends Component {
-  state = { show_high:null,highestBid: 0, highestBidder: "", web3: null, accounts: null, contract: null, input: ""  };
+  state = { highestBid: 0, highestBidder: "", web3: null, accounts: null, contract: null, input: "", show_high: null  };
 
   componentDidMount = async () => {
     try {
@@ -22,7 +22,7 @@ class App extends Component {
         deployedNetwork && deployedNetwork.address,
       );
     const response1 = await instance.methods.highestBid.call();
-        const response2 = await instance.methods.highestBidder.call();
+    const response2 = await instance.methods.highestBidder.call();
     // Update state with the result.
     this.setState({ highestBid: response1, highestBidder: response2 });
       // Set web3, accounts, and contract to the state, and then proceed with an
