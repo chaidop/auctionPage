@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/auctionPage/precache-manifest.5d5818e018b090bd6dd6aa86631bd39d.js"
+  "/auctionPage/precache-manifest.b0ad04be3ff2d3a9004067dd24c1d8ae.js"
 );
 
 self.addEventListener('message', (event) => {
