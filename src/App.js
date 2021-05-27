@@ -22,10 +22,9 @@ class App extends Component {
         deployedNetwork && deployedNetwork.address,
 
       );
-    const response1 = await instance.methods.highestBid.call();
-    const response2 = await instance.methods.highestBidder.call();
-    // Update state with the result.
-    this.setState({ highestBid: response1, highestBidder: response2 });
+    const response1 = await instance.methods.highestBid().call();
+    const response2 = await instance.methods.highestBidder().call();
+    // Update state with the results
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance, highestBid: response1, highestBidder: response2});
@@ -110,7 +109,7 @@ clicked_highestBidder = async () => {
       return <div>Loading Web3, accounts, and contract...</div>;
   }
         let sh
-        if(this.state.show_high == null){
+        if(Number(this.state.highestBid) == 0){
                 sh = <div>Highest Bid: 0, Highest Bidder: NONE </div>;
         }
         else{
